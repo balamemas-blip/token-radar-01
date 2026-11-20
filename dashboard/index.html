@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div>
+      <p class="brand"><span class="dot" aria-hidden="true"></span>TOKEN RADAR</p>
+      <h1>Which protocol launches next — and what it would be worth</h1>
+      <p class="lede">Every protocol below records no token yet. Each is ranked by an implied
+      value built only from its own figures — TVL, seven-day growth, how long it has
+      run with no token, and how many chains it runs on. Pick a row for its model
+      breakdown and its farm plan.</p>
+    </div>
+    <dl class="stats" id="stats"></dl>
+  </header>
+
+  <section class="panel model" aria-labelledby="model-title">
+    <h2 id="model-title">The model — radar-2</h2>
+    <p class="sub">Implied value = TVL × 0.28 × growth × age × breadth × certainty.
+    Falls hurt more than rises help (0.90 vs 0.55). Older no-token runs score higher,
+    up to 4 years. No protocol name is special-cased — one function scores every row,
+    and the page recomputes each row from the same figures.</p>
+    <div class="sandbox">
+      <label>Base multiple <output id="out-base">0.28</output>
+        <input type="range" id="in-base" min="0.10" max="0.50" step="0.01" value="0.28"></label>
+      <label>Growth weight, rises <output id="out-up">0.55</output>
+        <input type="range" id="in-up" min="0" max="1" step="0.05" value="0.55"></label>
+      <label>Growth weight, falls <output id="out-down">0.90</output>
+        <input type="range" id="in-down" min="0" max="1.5" step="0.05" value="0.90"></label>
+      <p class="sandbox-read" id="sandbox-read"></p>
+      <button type="button" id="apply-sandbox">Apply these settings to the table</button>
+      <button type="button" id="reset-sandbox">Reset to board values</button>
+    </div>
+  </section>
+
+  <section class="controls" aria-label="Filter the board">
+    <label class="field">Search
+      <input type="search" id="q" placeholder="Protocol name or slug…" autocomplete="off"></label>
+    <label class="field">Category
+      <select id="category"><option value="all">All categories</option></select></label>
+    <label class="field">Chain
+      <select id="chain"><option value="all">All chains</option></select></label>
+    <label class="field">Minimum TVL
+      <select id="min-tvl">
+        <option value="0">Any TVL</option>
+        <option value="50000000">$50M and up</option>
+        <option value="100000000">$100M and up</option>
+        <option value="500000000">$500M and up</option>
+      </select></label>
+    <label class="check"><input type="checkbox" id="watchlist-only"> Watchlist only</label>
+    <span class="count" id="count"></span>
+  </section>
+
+  <div class="tabs" role="group" aria-label="Board view">
+    <button type="button" id="tab-pre" aria-pressed="true">Pre-token board</button>
+    <button type="button" id="tab-live" aria-pressed="false">Live token — already trading</button>
+  </div>
+
+  <section class="panel" aria-label="Ranked board">
+    <div class="table-wrap">
+      <table id="board">
+        <caption class="sub">Pre-token protocols, strongest implied value first. Select a row for its model and farm plan.</caption>
+        <thead><tr>
+          <th><button type="button" data-sort="rank">Rank</button></th>
+          <th><button type="button" data-sort="name">Protocol</button></th>
+          <th><button type="button" data-sort="category">Category</button></th>
+          <th>Chains</th>
+          <th><button type="button" data-sort="tvl">TVL</button></th>
+          <th><button type="button" data-sort="growth">7d</button></th>
+          <th><button type="button" data-sort="age">Age</button></th>
+          <th>Signal</th>
+          <th><button type="button" data-sort="implied">Implied value</button></th>
+        </tr></thead>
+        <tbody id="board-body"></tbody>
+      </table>
+      <table id="live" hidden>
+        <caption class="sub">Token live: these protocols already trade, so their market cap is a fact, not a model. They are set aside from the pre-token ranking.</caption>
+        <thead><tr><th>Protocol</th><th>Category</th><th>Chains</th><th>TVL</th><th>7d</th><th>Market cap</th></tr></thead>
+        <tbody id="live-body"></tbody>
+      </table>
+    </div>
+    <p class="empty" id="empty" hidden>No protocol matches that filter. <button type="button" id="clear">Clear filters</button></p>
+  </section>
+
+  <section class="panel detail" id="detail" aria-labelledby="detail-title" hidden>
+    <div class="detail-head">
+      <div><h2 id="detail-title"></h2><p class="sub" id="detail-sub"></p></div>
+      <button type="button" id="detail-close">Close</button>
+    </div>
+    <div class="detail-grid">
+      <div>
+        <h3>Model breakdown</h3>
+        <table class="breakdown"><tbody id="breakdown-body"></tbody></table>
+        <p class="sub" id="recompute"></p>
+      </div>
+      <div>
+        <h3>Farm plan — 7 steps</h3>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p><strong>How to read this board.</strong> “Records no token” means the snapshot’s
+    DefiLlama record carries no token for the protocol — it is not proof the protocol
+    has none. Implied value is this radar’s own claim about what a token would be worth
+    if the protocol’s record stayed as it is; it never predicts whether or when a token
+    is issued. A token may never launch, and points are not a promised allocation.</p>
+    <p class="sub" id="source-line"></p>
+  </footer>
+</main>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
